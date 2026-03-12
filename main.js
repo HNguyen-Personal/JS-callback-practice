@@ -159,11 +159,26 @@ loc([1, 2, 3, 4, 5], function (n) {
    return n % 2 === 0;
 });
 
-
 // LEVEL 2: Hiểu .map, .filter, .forEach, .reduce (Bài 11–20)
 // Bài 11: Viết lại bài 9 bằng .map
 // // Dùng [1,2,3].map(function(n) { return n * 10; })
 // // So sánh kết quả với bài 9
+
+const bienDoi2 = (arr, callback) => {
+   let newArr = arr.map(callback);
+   console.log(newArr);
+};
+
+bienDoi2([1, 2, 3], function (n) {
+   return n * 10;
+});
+
+// console.log(
+//    [1, 2, 3].map(function (n) {
+//       return n * 10;
+//    }),
+// );
+
 // Bài 12: Viết lại bài 10 bằng .filter
 // // Dùng [1,2,3,4,5].filter(function(n) { return n % 2 === 0; })
 // Bài 13: .forEach — in ra từng phần tử
