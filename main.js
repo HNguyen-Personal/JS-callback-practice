@@ -181,20 +181,69 @@ bienDoi2([1, 2, 3], function (n) {
 
 // Bài 12: Viết lại bài 10 bằng .filter
 // // Dùng [1,2,3,4,5].filter(function(n) { return n % 2 === 0; })
+
+const loc2 = (arr, callback) => {
+   let newArr = arr.filter(callback);
+   console.log(newArr);
+};
+
+loc2([1, 2, 3, 4, 5], function (n) {
+   return n % 2 === 0;
+});
+
 // Bài 13: .forEach — in ra từng phần tử
 // // Dùng ["táo", "cam", "xoài"].forEach(function(trai, index) {
 // //   console.log(index + ": " + trai);
 // // })
 // // Câu hỏi: forEach return gì? (undefined)
+
+// ["táo", "cam", "xoài"].forEach(function (trai, index) {
+//    console.log(index + ": " + trai);
+// });
+
+const learnforEach = (arr, callback) => {
+   arr.forEach(callback);
+};
+
+learnforEach(["táo", "cam", "xoài"], function (trai, index) {
+   console.log(index + ": " + trai);
+});
+
 // Bài 14: .reduce — tính tổng
 // // Dùng [10, 20, 30].reduce(function(tong, so) { return tong + so; }, 0)
 // // Gợi ý: tham số thứ 2 của reduce (số 0) là giá trị khởi đầu của tong
 // // Trace qua từng bước: tong=0,so=10 → tong=10,so=20 → tong=30,so=30 → 60
+
+const tinhTong = function (tong, so) {
+   return tong + so;
+};
+
+const learnReduce = (arr, callback) => {
+   let result = arr.reduce(callback, 0);
+   console.log(result);
+};
+
+learnReduce([10, 20, 30], tinhTong);
+
 // Bài 15: .reduce — đếm chữ cái
 // // Cho mảng: ["a", "b", "a", "c", "a", "b"]
 // // Dùng .reduce để tạo object đếm: { a: 3, b: 2, c: 1 }
 // // Gợi ý: giá trị khởi đầu là {}
 // // reduce(function(dem, chu) { dem[chu] = (dem[chu] || 0) + 1; return dem; }, {})
+
+const demChuCai = (dem, currentValue, currentIndex) => {
+   dem[currentValue] = (dem[currentValue] || 0) + 1;
+   // console.log(dem, currentValue, currentIndex);
+   return dem;
+};
+
+const demChu = (arr, callback) => {
+   let result = arr.reduce(callback, {});
+   console.log(result);
+   // return result;
+};
+
+demChu(["a", "b", "a", "c", "a", "b"], demChuCai);
 // Bài 16: .filter rồi .map (chain)
 // // Cho mảng: [5, 12, 8, 20, 3]
 // // Lọc số > 10, rồi nhân đôi mỗi số
