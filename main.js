@@ -249,24 +249,191 @@ demChu(["a", "b", "a", "c", "a", "b"], demChuCai);
 // // Lọc số > 10, rồi nhân đôi mỗi số
 // // Kết quả: [24, 40]
 // // Viết bằng: arr.filter(...).map(...)
+
+const dieuKien = (so) => {
+   return so > 10;
+};
+
+const double = (so) => so * 2;
+
+console.log([5, 12, 8, 20, 3].filter(dieuKien).map(double));
+
 // Bài 17: .sort với callback so sánh
 // // Cho mảng: [3, 1, 4, 1, 5]
 // // Sắp xếp tăng dần: arr.sort(function(a, b) { return a - b; })
 // // Sắp xếp giảm dần: arr.sort(function(a, b) { return b - a; })
 // // Câu hỏi: Callback của .sort nhận 2 params — ai truyền chúng?
+
+//Callback cua .sort nhan 2 params do chinh array goi truyen vao
+
+const sortIncrease = (a, b) => a - b;
+const sortDecrease = (a, b) => b - a;
+
+console.log([3, 1, 4, 1, 5].sort(sortDecrease));
+console.log([3, 1, 4, 1, 5].sort(sortIncrease));
+
 // Bài 18: .find với callback
 // // Cho mảng users:
 // // [{ ten: "An", tuoi: 15 }, { ten: "Binh", tuoi: 22 }, { ten: "Cuong", tuoi: 19 }]
 // // Tìm user đầu tiên có tuoi >= 18
 // // Dùng: users.find(function(user) { return user.tuoi >= 18; })
+const users = [
+   { ten: "An", tuoi: 15 },
+   { ten: "Binh", tuoi: 22 },
+   { ten: "Cuong", tuoi: 19 },
+];
+
+const checkUserAge = (user) => user.tuoi >= 18;
+
+console.log(users.find(checkUserAge));
+
 // Bài 19: .every và .some
 // // Cho mảng: [2, 4, 6, 8]
 // // .every(function(n) { return n % 2 === 0; }) → true (tất cả chẵn)
 // // .some(function(n) { return n > 7; }) → true (có ít nhất 1 số > 7)
 // // Thử thêm số 3 vào mảng, kiểm tra lại
+
+const checkEvery = (num) => num % 2 === 0;
+const checkSome = (num) => num > 7;
+
+console.log([2, 4, 6, 8, 10, 1, 3, 5, 25].every(checkEvery));
+console.log([2, 4, 6, 8, 10, 1, 3, 5, 25].some(checkSome));
+
 // Bài 20: Kết hợp reduce + filter
 // // Cho mảng đơn hàng:
 // // [{ ten: "A", gia: 100 }, { ten: "B", gia: 250 }, { ten: "C", gia: 50 }, { ten: "D", gia: 300 }]
 // // Tính tổng giá các đơn > 100
 // // Gợi ý: .filter(...).reduce(...)
 // // Kết quả: 550
+
+const donHang = [
+   { ten: "A", gia: 100 },
+   { ten: "B", gia: 250 },
+   { ten: "C", gia: 50 },
+   { ten: "D", gia: 300 },
+];
+
+const checkDonHang = (don) => don.gia > 100;
+const tongDonHang = (sum, donHang) => {
+   return sum + donHang.gia;
+};
+console.log(donHang.filter(checkDonHang).reduce(tongDonHang, 0));
+
+// ## LEVEL 3: Tự viết hàm nhận callback (Bài 21–30)
+
+// ### Bài 21: Hàm retry
+// ```js
+// // Viết hàm retry(soLan, callback)
+// // Gọi callback(), nếu nó return false → thử lại, tối đa soLan lần
+// // Nếu return true → dừng, in "Thành công ở lần X"
+// // Nếu hết soLan mà vẫn false → in "Thất bại"
+// // Test: cho callback random true/false: function() { return Math.random() > 0.7; }
+// ```
+
+// ### Bài 22: Hàm pipeline
+// ```js
+// // Viết hàm pipeline(giaTri, ...callbacks)
+// // Chạy giaTri qua từng callback theo thứ tự
+// // pipeline(5, 
+// //   function(n) { return n * 2; },      // 10
+// //   function(n) { return n + 3; },      // 13
+// //   function(n) { return n.toString(); } // "13"
+// // )
+// // Return kết quả cuối: "13"
+// // Gợi ý: dùng reduce hoặc for loop
+// ```
+
+// ### Bài 23: Hàm tìm kiếm tùy chỉnh
+// ```js
+// // Viết hàm timKiem(arr, dieuKien) — dieuKien là callback
+// // Return mảng các phần tử mà dieuKien(phanTu) === true
+// // Khác .filter ở chỗ: cũng return INDEX của phần tử
+// // Return: [{ index: 1, giaTri: "cam" }, ...]
+// // Test: timKiem(["táo","cam","xoài"], function(t) { return t.length === 3; })
+// ```
+
+// ### Bài 24: Hàm nhóm (groupBy)
+// ```js
+// // Viết hàm nhom(arr, layKey)
+// // layKey là callback nhận phần tử, return tên nhóm
+// // Cho: [{ten:"An", lop:"A"}, {ten:"Bi", lop:"B"}, {ten:"Cu", lop:"A"}]
+// // nhom(arr, function(sv) { return sv.lop; })
+// // Kết quả: { A: [{ten:"An",...}, {ten:"Cu",...}], B: [{ten:"Bi",...}] }
+// ```
+
+// ### Bài 25: Hàm debounce đơn giản
+// ```js
+// // Viết hàm debounce(callback, delay)
+// // Return một function MỚI
+// // Khi function mới được gọi, nó đợi delay ms rồi mới gọi callback
+// // Nếu bị gọi lại trước khi hết delay → reset timer
+// // Gợi ý: dùng setTimeout và clearTimeout
+// // const debouncedLog = debounce(function(msg) { console.log(msg); }, 1000);
+// // debouncedLog("a"); debouncedLog("b"); debouncedLog("c");
+// // → Chỉ in "c" sau 1 giây
+// ```
+
+// ### Bài 26: Hàm once
+// ```js
+// // Viết hàm once(callback)
+// // Return function mới chỉ gọi callback ĐÚng 1 LẦN
+// // Lần gọi tiếp theo → bỏ qua, return undefined
+// // const f = once(function(x) { return x * 2; });
+// // f(5) → 10
+// // f(5) → undefined
+// // f(100) → undefined
+// ```
+
+// ### Bài 27: Hàm memoize
+// ```js
+// // Viết hàm memoize(callback)
+// // Return function mới: nếu đã gọi với arg này rồi → return kết quả cũ (cache)
+// // Nếu chưa → gọi callback, lưu kết quả, rồi return
+// // const slowDouble = memoize(function(n) { 
+// //   console.log("Tính toán..."); return n * 2; 
+// // });
+// // slowDouble(5) → "Tính toán..." → 10
+// // slowDouble(5) → 10 (không in "Tính toán..." nữa)
+// // slowDouble(3) → "Tính toán..." → 6
+// ```
+
+// ### Bài 28: Event emitter mini
+// ```js
+// // Tạo object eventBus với:
+// // - on(tenSuKien, callback) — đăng ký callback cho sự kiện
+// // - emit(tenSuKien, data) — gọi tất cả callback đã đăng ký, truyền data
+// // eventBus.on("login", function(user) { console.log(user + " đã đăng nhập"); });
+// // eventBus.on("login", function(user) { console.log("Chào " + user); });
+// // eventBus.emit("login", "Hoang");
+// // → "Hoang đã đăng nhập"
+// // → "Chào Hoang"
+// ```
+
+// ### Bài 29: Hàm compose (ngược pipeline)
+// ```js
+// // Viết hàm compose(...callbacks)
+// // Return function mới: chạy callbacks từ PHẢI sang TRÁI
+// // const fn = compose(
+// //   function(x) { return x + "!" },    // bước 3
+// //   function(x) { return x.toUpperCase(); }, // bước 2
+// //   function(x) { return "hello " + x; }     // bước 1
+// // );
+// // fn("world") → "HELLO WORLD!"
+// ```
+
+// ### Bài 30: Middleware chain
+// ```js
+// // Viết hàm chayMiddleware(data, middlewares, cuoiCung)
+// // middlewares là mảng các function(data, next)
+// // Mỗi middleware xử lý data rồi gọi next(data) để chuyển tiếp
+// // Nếu không gọi next → chuỗi dừng
+// // cuoiCung(data) được gọi ở cuối chuỗi
+// //
+// // chayMiddleware("hello", [
+// //   function(data, next) { next(data.toUpperCase()); },
+// //   function(data, next) { next(data + "!!!"); }
+// // ], function(data) { console.log(data); });
+// // → "HELLO!!!"
+// ```
+
+// ---
