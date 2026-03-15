@@ -330,11 +330,28 @@ console.log(donHang.filter(checkDonHang).reduce(tongDonHang, 0));
 // // Test: cho callback random true/false: function() { return Math.random() > 0.7; }
 // ```
 
+const randomCheck = function () {
+   return Math.random() > 0.7;
+};
+
+const retry = (soLan, callback) => {
+   let dem = 1;
+   while (dem <= soLan) {
+      if (callback()) {
+         return console.log(`Thanh cong o lan ${dem}`);
+      }
+      dem++;
+   }
+
+   console.log(`Thu het ${soLan} lan, Thất bại`);
+};
+
+retry(5, randomCheck);
 // ### Bài 22: Hàm pipeline
 // ```js
 // // Viết hàm pipeline(giaTri, ...callbacks)
 // // Chạy giaTri qua từng callback theo thứ tự
-// // pipeline(5, 
+// // pipeline(5,
 // //   function(n) { return n * 2; },      // 10
 // //   function(n) { return n + 3; },      // 13
 // //   function(n) { return n.toString(); } // "13"
@@ -342,6 +359,20 @@ console.log(donHang.filter(checkDonHang).reduce(tongDonHang, 0));
 // // Return kết quả cuối: "13"
 // // Gợi ý: dùng reduce hoặc for loop
 // ```
+
+const pipelineDouble = (num) => num * 2;
+const pipelinePlus3 = (num) => num + 3;
+const pipelineToString = (num) => num.toString();
+
+const pipeline = function (giaTri, ...callbacks) {
+   let result = giaTri;
+   for (const callback of callbacks) {
+      result = callback(result);
+   }
+   return result;
+};
+
+console.log(pipeline(5, pipelineDouble, pipelinePlus3, pipelineToString));
 
 // ### Bài 23: Hàm tìm kiếm tùy chỉnh
 // ```js
@@ -389,8 +420,8 @@ console.log(donHang.filter(checkDonHang).reduce(tongDonHang, 0));
 // // Viết hàm memoize(callback)
 // // Return function mới: nếu đã gọi với arg này rồi → return kết quả cũ (cache)
 // // Nếu chưa → gọi callback, lưu kết quả, rồi return
-// // const slowDouble = memoize(function(n) { 
-// //   console.log("Tính toán..."); return n * 2; 
+// // const slowDouble = memoize(function(n) {
+// //   console.log("Tính toán..."); return n * 2;
 // // });
 // // slowDouble(5) → "Tính toán..." → 10
 // // slowDouble(5) → 10 (không in "Tính toán..." nữa)
